@@ -5,7 +5,7 @@ const count = ref(0);
 
 <template>
   <header>
-    <h1>Basic counter app</h1>
+    <h1 class="text-3xl font-bold underline">Basic counter app</h1>
     <p>{{ count }}</p>
     <button @click="count--">Decrement</button>
     <button @click="count++">increment</button>
