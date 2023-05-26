@@ -3,5 +3,6 @@ import Counter from "./counter/Counter.vue";
 </script>
 
 <template>
-  <Counter />
+  <!-- <Counter /> -->
+  <router-view></router-view>
 </template>
