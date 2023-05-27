@@ -4,12 +4,16 @@ import { ref } from "vue";
 const showModal = ref(false);
 const newNote = ref("");
 const notes = ref([]);
+const errorMessage = ref("");
 
 function getRandomColor() {
   return "hsl(" + Math.random() * 360 + ", 100%, 75%)";
 }
 
 const addNote = () => {
+  if (newNote.value.length < 10) {
+    return (errorMessage.value = "Note must be at least 10 characters long");
+  }
   notes.value.push({
     id: Math.floor(Math.random() * 1000000000),
     text: newNote.value,
@@ -18,6 +22,7 @@ const addNote = () => {
   });
   newNote.value = "";
   showModal.value = false;
+  errorMessage.value = "";
 };
 </script>
 
@@ -31,7 +36,7 @@ const addNote = () => {
         class="w-[750px] bg-white rounded-lg p-[30px] relative flex flex-col"
       >
         <textarea
-          v-model="newNote"
+          v-model.trim="newNote"
           class="outline outline-2 outline-slate-400"
           name="note"
           id="note"
@@ -39,6 +44,8 @@ const addNote = () => {
           rows="10"
           placeholder="Enter your note here..."
         ></textarea>
+
+        <p v-if="errorMessage" class="text-red-700">{{ errorMessage }}</p>
         <button
           @click="addNote"
           class="py-[10px] px-[20px] text-3xl w-[100%] bg-blue-700 border-none text-white cursor-pointer mt-[15px] rounded"
@@ -66,13 +73,15 @@ const addNote = () => {
       </header>
       <div class="flex flex-wrap">
         <div
-          class="w-[225px] h-[225px] bg-orange-500 p-5 rounded flex flex-col justify-between mr-[20px] mb-[20px]"
+          v-for="note in notes"
+          :key="note.id"
+          :style="{ backgroundColor: note.backgroundColor }"
+          class="w-[225px] h-[225px] p-5 rounded flex flex-col justify-between mr-[20px] mb-[20px]"
         >
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Accusantium, quibusdam earum maiores illo sunt soluta?
+          <p>{{ note.text }}</p>
+          <p class="text-sm font-bold">
+            {{ note.date.toLocaleDateString("en-US") }}
           </p>
-          <p class="text-sm font-bold">04/05/2022</p>
         </div>
       </div>
     </div>
